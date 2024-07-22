@@ -110,7 +110,11 @@ function update() {
         }
 
         // 좌우 벽과 충돌 검사
-        if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+        if (ball.x + ball.radius > canvas.width) {
+            ball.x = canvas.width - ball.radius;
+            ball.vx *= -ball.restitution;
+        } else if (ball.x - ball.radius < 0) {
+            ball.x = ball.radius;
             ball.vx *= -ball.restitution;
         }
     }
@@ -122,35 +126,14 @@ function update() {
     ctx.fill();
     ctx.closePath();
 
-    // 공의 회전 표시 (여러 개의 마커 추가)
+    // 공의 회전 표시 (하나의 마커 추가)
     ctx.save();
     ctx.translate(ball.x, ball.y);
     ctx.rotate(ball.angle);
 
-    // 마커 1
+    // 마커
     ctx.beginPath();
     ctx.arc(ball.radius / 2, 0, ball.radius / 5, 0, Math.PI * 2);
-    ctx.fillStyle = 'black';
-    ctx.fill();
-    ctx.closePath();
-
-    // 마커 2
-    ctx.beginPath();
-    ctx.arc(-ball.radius / 2, 0, ball.radius / 5, 0, Math.PI * 2);
-    ctx.fillStyle = 'black';
-    ctx.fill();
-    ctx.closePath();
-
-    // 마커 3
-    ctx.beginPath();
-    ctx.arc(0, ball.radius / 2, ball.radius / 5, 0, Math.PI * 2);
-    ctx.fillStyle = 'black';
-    ctx.fill();
-    ctx.closePath();
-
-    // 마커 4
-    ctx.beginPath();
-    ctx.arc(0, -ball.radius / 2, ball.radius / 5, 0, Math.PI * 2);
     ctx.fillStyle = 'black';
     ctx.fill();
     ctx.closePath();

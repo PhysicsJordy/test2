@@ -8,6 +8,7 @@ let ball = {
     vx: 2,
     vy: 2,
     omega: parseFloat(document.getElementById('initialOmega').value), // 초기 각속도
+    angle: 0, // 현재 회전 각도
     mass: 1,
     inertia: 1, // 관성 모멘트
     friction: parseFloat(document.getElementById('friction').value), // 마찰 계수
@@ -25,6 +26,7 @@ function resetSimulation() {
         vx: 2,
         vy: 2,
         omega: parseFloat(document.getElementById('initialOmega').value),
+        angle: 0,
         mass: 1,
         inertia: 1, // 관성 모멘트
         friction: parseFloat(document.getElementById('friction').value),
@@ -61,6 +63,7 @@ canvas.addEventListener('mousemove', (e) => {
         ball.vx = 0;
         ball.vy = 0;
         ball.omega = 0;
+        ball.angle = 0;
     }
 });
 
@@ -82,6 +85,9 @@ function update() {
         // 위치 업데이트
         ball.x += ball.vx;
         ball.y += ball.vy;
+
+        // 각도 업데이트
+        ball.angle += ball.omega;
 
         // 바닥과 충돌 검사
         if (ball.y + ball.radius > canvas.height) {
@@ -113,15 +119,15 @@ function update() {
     ctx.fill();
     ctx.closePath();
 
-    // 공의 회전 표시
+    // 공의 회전 표시 (마커 추가)
     ctx.save();
     ctx.translate(ball.x, ball.y);
-    ctx.rotate(ball.omega);
+    ctx.rotate(ball.angle);
     ctx.beginPath();
-    ctx.moveTo(-ball.radius, 0);
-    ctx.lineTo(ball.radius, 0);
-    ctx.strokeStyle = 'black';
-    ctx.stroke();
+    ctx.arc(ball.radius / 2, 0, ball.radius / 5, 0, Math.PI * 2);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+    ctx.closePath();
     ctx.restore();
 
     requestAnimationFrame(update);

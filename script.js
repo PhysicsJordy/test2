@@ -1,8 +1,7 @@
 const canvas = document.getElementById('simulationCanvas');
 const ctx = canvas.getContext('2d');
 
-// 공 객체
-const ball = {
+let ball = {
     x: canvas.width / 2,
     y: canvas.height / 2,
     radius: 20,
@@ -19,13 +18,18 @@ const gravity = 0.1; // 중력 가속도
 let dragging = false; // 드래그 상태
 
 function resetSimulation() {
-    ball.x = canvas.width / 2;
-    ball.y = canvas.height / 2;
-    ball.vx = 2;
-    ball.vy = 2;
-    ball.omega = parseFloat(document.getElementById('initialOmega').value);
-    ball.friction = parseFloat(document.getElementById('friction').value);
-    ball.restitution = parseFloat(document.getElementById('restitution').value);
+    ball = {
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+        radius: 20,
+        vx: 2,
+        vy: 2,
+        omega: parseFloat(document.getElementById('initialOmega').value),
+        mass: 1,
+        inertia: 1, // 관성 모멘트
+        friction: parseFloat(document.getElementById('friction').value),
+        restitution: parseFloat(document.getElementById('restitution').value)
+    };
 }
 
 document.getElementById('resetButton').addEventListener('click', () => {

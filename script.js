@@ -28,6 +28,10 @@ function resetSimulation() {
     ball.restitution = parseFloat(document.getElementById('restitution').value);
 }
 
+document.getElementById('resetButton').addEventListener('click', () => {
+    resetSimulation();
+});
+
 function getMousePos(canvas, evt) {
     const rect = canvas.getBoundingClientRect();
     return {

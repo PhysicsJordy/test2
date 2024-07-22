@@ -1,47 +1,97 @@
 const canvas = document.getElementById('simulationCanvas');
 const ctx = canvas.getContext('2d');
 
+// 공 객체
 const ball = {
     x: canvas.width / 2,
     y: canvas.height / 2,
     radius: 20,
     vx: 2,
     vy: 2,
-    omega: 0.1, // 각속도 (라디안/프레임)
+    omega: parseFloat(document.getElementById('initialOmega').value), // 초기 각속도
     mass: 1,
-    inertia: 1, // 관성 모멘트 (여기서는 단순화를 위해 1로 설정)
-    friction: 0.01, // 마찰 계수
-    restitution: 0.8 // 반발 계수
+    inertia: 1, // 관성 모멘트
+    friction: parseFloat(document.getElementById('friction').value), // 마찰 계수
+    restitution: parseFloat(document.getElementById('restitution').value) // 반발 계수
 };
 
 const gravity = 0.1; // 중력 가속도
+let dragging = false; // 드래그 상태
+
+function resetSimulation() {
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
+    ball.vx = 2;
+    ball.vy = 2;
+    ball.omega = parseFloat(document.getElementById('initialOmega').value);
+    ball.friction = parseFloat(document.getElementById('friction').value);
+    ball.restitution = parseFloat(document.getElementById('restitution').value);
+}
+
+function getMousePos(canvas, evt) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+    };
+}
+
+canvas.addEventListener('mousedown', (e) => {
+    const mousePos = getMousePos(canvas, e);
+    const dx = mousePos.x - ball.x;
+    const dy = mousePos.y - ball.y;
+    if (Math.sqrt(dx * dx + dy * dy) < ball.radius) {
+        dragging = true;
+    }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+    if (dragging) {
+        const mousePos = getMousePos(canvas, e);
+        ball.x = mousePos.x;
+        ball.y = mousePos.y;
+        ball.vx = 0;
+        ball.vy = 0;
+        ball.omega = 0;
+    }
+});
+
+canvas.addEventListener('mouseup', () => {
+    dragging = false;
+});
+
+canvas.addEventListener('mouseleave', () => {
+    dragging = false;
+});
 
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 중력 효과
-    ball.vy += gravity;
+    if (!dragging) {
+        // 중력 효과
+        ball.vy += gravity;
 
-    // 위치 업데이트
-    ball.x += ball.vx;
-    ball.y += ball.vy;
+        // 위치 업데이트
+        ball.x += ball.vx;
+        ball.y += ball.vy;
 
-    // 바닥과 충돌 검사
-    if (ball.y + ball.radius > canvas.height) {
-        ball.y = canvas.height - ball.radius;
-        ball.vy *= -ball.restitution;
+        // 바닥과 충돌 검사
+        if (ball.y + ball.radius > canvas.height) {
+            ball.y = canvas.height - ball.radius;
+            ball.vy *= -ball.restitution;
 
-        // 마찰에 의한 각속도 변화
-        const frictionForce = ball.friction * ball.vx;
-        ball.omega += frictionForce / ball.inertia;
+            // 마찰에 의한 각속도 변화
+            const frictionForce = ball.friction * ball.vx;
+            ball.omega += frictionForce / ball.inertia;
 
-        // 속도 감소 (마찰로 인한 속도 변화)
-        ball.vx *= (1 - ball.friction);
-    }
+            // 속도 감소 (마찰로 인한 속도 변화)
+            ball.vx *= (1 - ball.friction);
+        }
 
-    // 좌우 벽과 충돌 검사
-    if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
-        ball.vx *= -ball.restitution;
+        // 좌우 벽과 충돌 검사
+        if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+            ball.vx *= -ball.restitution;
+        }
     }
 
     // 공 그리기
@@ -65,4 +115,5 @@ function update() {
     requestAnimationFrame(update);
 }
 
+resetSimulation();
 update();

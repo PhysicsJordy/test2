@@ -97,12 +97,15 @@ function update() {
             // 바닥 충돌부분의 수평 속도 계산
             const bottomSpeed = ball.vx - ball.radius * ball.omega;
 
+            // 마찰력 방향 결정
+            const frictionDirection = bottomSpeed > 0 ? -1 : 1;
+
             // 마찰력 계산
-            const frictionForce = ball.friction * bottomSpeed;
+            const frictionForce = frictionDirection * ball.friction * Math.abs(bottomSpeed);
             const frictionAcceleration = frictionForce / ball.mass;
 
             // 마찰력에 의한 속도 변화
-            ball.vx -= frictionAcceleration;
+            ball.vx += frictionAcceleration;
             ball.omega += (frictionForce * ball.radius) / ball.inertia;
         }
 

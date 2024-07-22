@@ -1,6 +1,10 @@
 const canvas = document.getElementById('simulationCanvas');
 const ctx = canvas.getContext('2d');
 
+// JavaScript 버전을 표시합니다.
+const version = 'JavaScript Version 1.0';
+document.getElementById('version').textContent = version;
+
 let ball = {
     x: canvas.width / 2,
     y: canvas.height / 2,

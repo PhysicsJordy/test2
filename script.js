@@ -119,15 +119,39 @@ function update() {
     ctx.fill();
     ctx.closePath();
 
-    // 공의 회전 표시 (마커 추가)
+    // 공의 회전 표시 (여러 개의 마커 추가)
     ctx.save();
     ctx.translate(ball.x, ball.y);
     ctx.rotate(ball.angle);
+
+    // 마커 1
     ctx.beginPath();
     ctx.arc(ball.radius / 2, 0, ball.radius / 5, 0, Math.PI * 2);
     ctx.fillStyle = 'black';
     ctx.fill();
     ctx.closePath();
+
+    // 마커 2
+    ctx.beginPath();
+    ctx.arc(-ball.radius / 2, 0, ball.radius / 5, 0, Math.PI * 2);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+    ctx.closePath();
+
+    // 마커 3
+    ctx.beginPath();
+    ctx.arc(0, ball.radius / 2, ball.radius / 5, 0, Math.PI * 2);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+    ctx.closePath();
+
+    // 마커 4
+    ctx.beginPath();
+    ctx.arc(0, -ball.radius / 2, ball.radius / 5, 0, Math.PI * 2);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+    ctx.closePath();
+
     ctx.restore();
 
     requestAnimationFrame(update);

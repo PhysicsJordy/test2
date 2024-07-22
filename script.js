@@ -94,7 +94,7 @@ function update() {
             ball.y = canvas.height - ball.radius;
             ball.vy *= -ball.restitution;
 
-            // 바닥 충돌부분의 수평 속도 계산
+            // 충돌 지점의 속도 계산
             const bottomSpeed = ball.vx - ball.radius * ball.omega;
 
             // 마찰력 방향 결정
@@ -106,7 +106,7 @@ function update() {
 
             // 마찰력에 의한 속도 변화
             ball.vx += frictionAcceleration;
-            ball.omega += (frictionForce * ball.radius) / ball.inertia;
+            ball.omega -= (frictionForce * ball.radius) / ball.inertia;
         }
 
         // 좌우 벽과 충돌 검사
